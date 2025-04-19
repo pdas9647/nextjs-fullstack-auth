@@ -1,31 +1,18 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-import { signInSchema } from "@/lib/zod";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {GitHubLogoIcon} from "@radix-ui/react-icons";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from "zod";
+import {signInSchema} from "@/lib/zod";
 import LoadingButton from "@/components/loading-button";
-import {
-    handleCredentialsSignin,
-    handleGithubSignin,
-} from "@/app/actions/authActions";
-import { useState } from "react";
+import {handleCredentialsSignin, handleGoogleSignin} from "@/app/actions/authActions";
+import {useState} from "react";
 import ErrorMessage from "@/components/error-message";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 
 export default function SignIn() {
     const [globalError, setGlobalError] = useState<string>("");
@@ -33,7 +20,7 @@ export default function SignIn() {
         resolver: zodResolver(signInSchema),
         defaultValues: {
             email: "",
-            password: "",
+            code: "",
         },
     });
 
@@ -46,7 +33,7 @@ export default function SignIn() {
         } catch (error) {
             console.log("An unexpected error occurred. Please try again.");
         }
-    };
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen p-4">
@@ -59,10 +46,7 @@ export default function SignIn() {
                 <CardContent>
                     {globalError && <ErrorMessage error={globalError} />}
                     <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-8"
-                        >
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -70,12 +54,7 @@ export default function SignIn() {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                type="email"
-                                                placeholder="Enter your email address"
-                                                autoComplete="off"
-                                                {...field}
-                                            />
+                                            <Input {...field} type="email" placeholder="Enter email"/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -84,16 +63,12 @@ export default function SignIn() {
 
                             <FormField
                                 control={form.control}
-                                name="password"
+                                name="code"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>Code</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                type="password"
-                                                placeholder="Enter password"
-                                                {...field}
-                                            />
+                                            <Input {...field} type="text" placeholder="Enter code"/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -101,21 +76,13 @@ export default function SignIn() {
                             />
 
                             {/* Submit button will go here */}
-                            <LoadingButton
-                                pending={form.formState.isSubmitting}
-                            />
+                            <LoadingButton pending={form.formState.isSubmitting}/>
                         </form>
                     </Form>
 
-                    <span className="text-sm text-gray-500 text-center block my-2">
-                        or
-                    </span>
-                    <form className="w-full" action={handleGithubSignin}>
-                        <Button
-                            variant="outline"
-                            className="w-full"
-                            type="submit"
-                        >
+                    <span className="text-sm text-gray-500 text-center block my-2">or</span>
+                    <form className="w-full" action={handleGoogleSignin}>
+                        <Button variant="outline" className="w-full" type="submit">
                             <GitHubLogoIcon className="h-4 w-4 mr-2" />
                             Sign in with GitHub
                         </Button>
