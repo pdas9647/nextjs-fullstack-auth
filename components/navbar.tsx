@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { auth } from "@/auth";
-import { handleSignOut } from "@/app/actions/authActions";
+import {Button} from "@/components/ui/button";
+import {auth} from "@/auth";
+import {handleSignOut} from "@/app/actions/authActions";
 
 export default async function Navbar() {
   const session = await auth();
